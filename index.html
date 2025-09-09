@@ -1,0 +1,149 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>WhānauSaver Programme Registration</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .form-container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+        }
+        h2 {
+            color: #005a9c;
+            text-align: center;
+        }
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        input[type="submit"] {
+            background-color: #005a9c;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        input[type="submit"]:hover {
+            background-color: #004080;
+        }
+        .logo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .logo img {
+            max-width: 200px;
+        }
+    </style>
+    <script>
+        function toggleIwiField() {
+            const role = document.getElementById("role").value;
+            const iwiGroup = document.getElementById("iwi-group");
+            const iwiSelect = document.getElementById("iwi");
+
+            if (role === "Iwi Reviewer") {
+                iwiGroup.style.display = "block";
+                iwiSelect.required = true;
+            } else {
+                iwiGroup.style.display = "none";
+                iwiSelect.required = false;
+                iwiSelect.value = "";
+            }
+        }
+
+        async function submitForm(event) {
+            event.preventDefault();
+
+            const data = {
+                role: document.getElementById("role").value,
+                iwi: document.getElementById("iwi").value,
+                firstname: document.getElementById("firstname").value,
+                lastname: document.getElementById("lastname").value,
+                email: document.getElementById("email").value,
+                orgrole: document.getElementById("orgrole").value
+            };
+
+            const response = await fetch("https://default4c7dc6b7f64f40a6a237ac11d6c92a.eb.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/f5261b99e58d4cb98b48a09ada146a41/triggers/manual/paths/invoke/?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=GOgj9sAq_O2SUXiv9-iYf3mmslLMNIyRoXAjYSnOUXo",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(data)
+                }
+            );
+
+            if (response.ok) {
+                window.location.href = "thankyou.html";
+            } else {
+                alert("Submission failed. Please try again.");
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="form-container">
+        <div class="logo">
+            <img src="https://kauruora.nz/wp-content/uploads/2022/06/Ka-Uruora-Logo.png" alt="Ka Uruora Logo">
+        </div>
+        <h2>WhānauSaver Programme Registration</h2>
+        <form onsubmit="submitForm(event)">
+            <label for="role">Select your role:</label>
+            <select id="role" name="role" onchange="toggleIwiField()" required>
+                <option value="">--Please choose an option--</option>
+                <option value="Iwi Reviewer">Iwi Reviewer</option>
+                <option value="SuperLife Admin">SuperLife Admin</option>
+                <option value="Ka Uruora Admin">Ka Uruora Admin</option>
+            </select>
+
+            <div id="iwi-group" style="display:none;">
+                <label for="iwi">Select your Iwi:</label>
+                <select id="iwi" name="iwi">
+                    <option value="">--Please choose an Iwi--</option>
+                    <option value="Te Kāhui o Taranaki Iwi">Te Kāhui o Taranaki Iwi</option>
+                    <option value="Te Kōtahitanga o Te Atiawa">Te Kōtahitanga o Te Atiawa</option>
+                    <option value="Ngāti Maru">Ngāti Maru</option>
+                    <option value="Ngāti Ruanui">Ngāti Ruanui</option>
+                    <option value="Ngā Rauru">Ngā Rauru</option>
+                </select>
+            </div>
+
+            <label for="firstname">First Name:</label>
+            <input type="text" id="firstname" name="firstname" required>
+
+            <label for="lastname">Last Name:</label>
+            <input type="text" id="lastname" name="lastname" required>
+
+            <label for="email">Email Address:</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="orgrole">Organisational Role:</label>
+            <input type="text" id="orgrole" name="orgrole">
+
+            <input type="submit" value="Submit">
+        </form>
+    </div>
+</body>
+</html>
