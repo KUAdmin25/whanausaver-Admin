@@ -21,6 +21,8 @@
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         width: 100%;
         max-width: 600px;
+        overflow-y: auto;
+        max-height: 95vh;
     }
     h2 {
         color: #005a9c;
@@ -31,15 +33,22 @@
         margin-top: 15px;
         font-weight: bold;
     }
-    input, select {
+    input[type="text"], input[type="email"], select {
         width: 100%;
         padding: 8px;
         margin-top: 5px;
         border: 1px solid #ccc;
         border-radius: 4px;
     }
-    select[multiple] {
-        height: auto;
+    input[type="checkbox"] {
+        margin-right: 10px;
+        transform: scale(1.1);
+    }
+    .checkbox-group {
+        margin-top: 10px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 5px 10px;
     }
     input[type="submit"] {
         background-color: #005a9c;
@@ -47,6 +56,9 @@
         border: none;
         cursor: pointer;
         margin-top: 20px;
+        padding: 10px;
+        width: 100%;
+        font-size: 16px;
     }
     input[type="submit"]:hover {
         background-color: #004080;
@@ -64,27 +76,26 @@
     function toggleIwiField() {
         const role = document.getElementById("role").value;
         const iwiGroup = document.getElementById("iwi-group");
-        const iwiSelect = document.getElementById("iwi");
+        const iwiCheckboxes = document.querySelectorAll("input[name='iwi']");
 
         if (role === "Iwi Reviewer") {
             iwiGroup.style.display = "block";
-            iwiSelect.required = true;
+            iwiCheckboxes.forEach(box => box.required = false);
         } else {
             iwiGroup.style.display = "none";
-            iwiSelect.required = false;
-            iwiSelect.value = "";
+            iwiCheckboxes.forEach(box => box.checked = false);
         }
     }
 
     async function submitForm(event) {
         event.preventDefault();
 
-        const iwiValues = Array.from(document.getElementById("iwi").selectedOptions)
-            .map(option => option.value);
+        const selectedIwi = Array.from(document.querySelectorAll("input[name='iwi']:checked"))
+            .map(cb => cb.value);
 
         const data = {
             role: document.getElementById("role").value,
-            iwi: iwiValues, // now an array of selected iwi
+            iwi: selectedIwi,
             firstname: document.getElementById("firstname").value,
             lastname: document.getElementById("lastname").value,
             email: document.getElementById("email").value,
@@ -110,7 +121,7 @@
 <body>
 <div class="form-container">
     <div class="logo">
-        <!-- Optional: add your logo here -->
+        <!-- Optional: add your logo -->
         <!-- <img src="logo.png" alt="WhānauSaver Logo"> -->
     </div>
 
@@ -125,22 +136,22 @@
         </select>
 
         <div id="iwi-group" style="display:none;">
-            <label for="iwi">Select your Iwi (you may choose more than one):</label>
-            <select id="iwi" name="iwi" multiple size="8">
-                <option value="Te Kāhui o Taranaki Iwi">Te Kāhui o Taranaki Iwi</option>
-                <option value="Te Kōtahitanga o Te Atiawa">Te Kōtahitanga o Te Atiawa</option>
-                <option value="Ngāti Maru">Ngāti Maru</option>
-                <option value="Ngāti Ruanui">Ngāti Ruanui</option>
-                <option value="Ngāti Tama o Taranaki">Ngāti Tama o Taranaki</option>
-                <option value="Ngā Rauru">Ngā Rauru</option>
-                <option value="Ngāti Mutunga">Ngāti Mutunga</option>
-                <option value="Ngāruahine">Ngāruahine</option>
-                <option value="Ngāti Kuia">Ngāti Kuia</option>
-                <option value="Ngāti Rārua">Ngāti Rārua</option>
-                <option value="Ngāti Tama ki te Waipounamu">Ngāti Tama ki te Waipounamu</option>
-                <option value="Rangitane o Wairau">Rangitane o Wairau</option>
-                <option value="Te Ātiawa ki te Waka-ā-Māui">Te Ātiawa ki te Waka-ā-Māui</option>
-            </select>
+            <label>Select your Iwi (you may choose more than one):</label>
+            <div class="checkbox-group">
+                <label><input type="checkbox" name="iwi" value="Te Kāhui o Taranaki Iwi">Te Kāhui o Taranaki Iwi</label>
+                <label><input type="checkbox" name="iwi" value="Te Kōtahitanga o Te Atiawa">Te Kōtahitanga o Te Atiawa</label>
+                <label><input type="checkbox" name="iwi" value="Ngāti Maru">Ngāti Maru</label>
+                <label><input type="checkbox" name="iwi" value="Ngāti Ruanui">Ngāti Ruanui</label>
+                <label><input type="checkbox" name="iwi" value="Ngāti Tama o Taranaki">Ngāti Tama o Taranaki</label>
+                <label><input type="checkbox" name="iwi" value="Ngā Rauru">Ngā Rauru</label>
+                <label><input type="checkbox" name="iwi" value="Ngāti Mutunga">Ngāti Mutunga</label>
+                <label><input type="checkbox" name="iwi" value="Ngāruahine">Ngāruahine</label>
+                <label><input type="checkbox" name="iwi" value="Ngāti Kuia">Ngāti Kuia</label>
+                <label><input type="checkbox" name="iwi" value="Ngāti Rārua">Ngāti Rārua</label>
+                <label><input type="checkbox" name="iwi" value="Ngāti Tama ki te Waipounamu">Ngāti Tama ki te Waipounamu</label>
+                <label><input type="checkbox" name="iwi" value="Rangitane o Wairau">Rangitane o Wairau</label>
+                <label><input type="checkbox" name="iwi" value="Te Ātiawa ki te Waka-ā-Māui">Te Ātiawa ki te Waka-ā-Māui</label>
+            </div>
         </div>
 
         <label for="firstname">First Name:</label>
