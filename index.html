@@ -41,7 +41,7 @@
         border-radius: 4px;
     }
     input[type="checkbox"] {
-        margin-right: 10px;
+        margin-right: 8px;
         transform: scale(1.1);
     }
     .checkbox-group {
@@ -90,8 +90,10 @@
     async function submitForm(event) {
         event.preventDefault();
 
+        // ✅ Collect selected iwi as plain text string (comma-separated)
         const selectedIwi = Array.from(document.querySelectorAll("input[name='iwi']:checked"))
-            .map(cb => cb.value);
+            .map(cb => cb.value)
+            .join(", ");
 
         const data = {
             role: document.getElementById("role").value,
@@ -118,6 +120,7 @@
     }
 </script>
 </head>
+
 <body>
 <div class="form-container">
     <div class="logo">
@@ -126,6 +129,7 @@
     </div>
 
     <h2>WhānauSaver Admin Registration</h2>
+
     <form onsubmit="submitForm(event)">
         <label for="role">Select your role:</label>
         <select id="role" name="role" onchange="toggleIwiField()" required>
