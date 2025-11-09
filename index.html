@@ -79,7 +79,7 @@
 
             const data = {
                 role: document.getElementById("role").value,
-                iwi: document.getElementById("iwi").value,
+                iwi: Array.from(document.getElementById("iwi").selectedOptions).map(option => option.value),
                 firstname: document.getElementById("firstname").value,
                 lastname: document.getElementById("lastname").value,
                 email: document.getElementById("email").value,
